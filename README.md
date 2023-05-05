@@ -22,6 +22,10 @@ A boilerplate for BabylonJS.
 
 That is our main object in the game. It handles the boot up of the game & contains the main, static variables (engine, canvas element, input manager, currently active world/level, ...). You can use it all across your codebase, as all the important variables are static.
 
+### GameManager SmartContractManager
+Handles all the Blockchain stuff of the game, like amount of Hex_Tiles rings, threshold of water/land tiles, startposition of player and non player objects, and updates them after every player/npc action.
+
+
 #### GameManager - InputManager
 
 Handles all the input stuff for the keyboard, mouse & gamepad(-s). The most important methods here are are `GameManager.inputManager.getAxes()` and `GameManager.inputManager.getActions()`. It will return back the axes values & action booleans, that you specified as your input bindings.
