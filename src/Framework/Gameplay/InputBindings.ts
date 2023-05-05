@@ -139,6 +139,29 @@ export class ThirdPersonInputBindings extends AbstractInputBindings {
         },
       },
     ],
+        // ... rest of the existing code ...
+
+        moveBackward: [
+          {
+            device: InputDeviceEnum.Keyboard,
+            data: {
+              keyCode: KeyboardKey.S,
+              scale: 1.0,
+            },
+          },
+        ],
+    
+        moveLeft: [
+          {
+            device: InputDeviceEnum.Keyboard,
+            data: {
+              keyCode: KeyboardKey.A,
+              scale: 1.0,
+            },
+          },
+        ],
+    
+        // ... rest of the existing code ...
   };
   public actionMappings = {
     interact: [

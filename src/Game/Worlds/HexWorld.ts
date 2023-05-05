@@ -52,22 +52,31 @@ import {
     }
   
     prepareCamera() {
-      let camera = new ArcRotateCamera(
-        'camera',
-        Tools.ToRadians(0),
-        Tools.ToRadians(60),
-        10,
-        Vector3.Zero(),
-        this.scene
-      );
-  
-      camera.lowerBetaLimit = Tools.ToRadians(10);
-      camera.upperBetaLimit = Tools.ToRadians(80);
-      camera.lowerRadiusLimit = 10;
-      camera.upperRadiusLimit = 20;
-  
-      this.scene.activeCamera = camera;
-    }
+        let cameraTarget = new Vector3(0, 0, 0); // Set the target point for the camera to rotate around
+      
+        let camera = new ArcRotateCamera(
+          'camera',
+          Tools.ToRadians(0),
+          Tools.ToRadians(60),
+          10,
+          cameraTarget,
+          this.scene
+        );
+      
+        camera.lowerBetaLimit = Tools.ToRadians(10);
+        camera.upperBetaLimit = Tools.ToRadians(80);
+        camera.lowerRadiusLimit = 10;
+        camera.upperRadiusLimit = 20;
+      
+        this.scene.activeCamera = camera;
+        this.scene.activeCamera.attachControl(this.scene.getEngine().getRenderingCanvas());
+      
+        // Enable camera movement using keyboard and mouse
+        camera.inputs.add(new BABYLON.ArcRotateCameraKeyboardMoveInput());
+        camera.inputs.add(new BABYLON.ArcRotateCameraMouseWheelInput());
+        camera.inputs.add(new BABYLON.ArcRotateCameraPointersInput());
+      }
+      
   
     prepareLights() {
       new HemisphericLight(
@@ -177,7 +186,9 @@ import {
           this.prepareNetworkToReplicateTransformsMovement();
         });
       }
-    
+
+    /*
+    //prepare player movement
       prepareNetworkToReplicateTransformsMovement() {
         super.prepareNetworkToReplicateTransformsMovement();
     
@@ -199,6 +210,8 @@ import {
         };
       }
     
+      //create player instance
+      
       prepareNetworkTransform(transform: Transform) {
         if (transform.type === 'player') {
           const existingTransform = this.scene.getNodeById(transform.id);
@@ -266,5 +279,6 @@ import {
           }
         }
       }
+      */
   }
   

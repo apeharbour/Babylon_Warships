@@ -154,6 +154,25 @@ export class ThirdPersonController extends AbstractController {
         );
       }
     }
+      // ... rest of the existing code ...
+
+    /***** Camera movement *****/
+    const camera = <ArcRotateCamera>GameManager.scene.activeCamera;
+    const cameraSpeed = 0.1; // Set the desired camera movement speed
+
+    if (inputAxes['moveForward'] !== 0) {
+      camera.target.addInPlace(Vector3.TransformNormal(new Vector3(0, 0, cameraSpeed), camera.getWorldMatrix()));
+    }
+    if (inputAxes['moveRight'] !== 0) {
+      camera.target.addInPlace(Vector3.TransformNormal(new Vector3(cameraSpeed, 0, 0), camera.getWorldMatrix()));
+    }
+    if (inputAxes['moveBackward'] !== 0) {
+      camera.target.addInPlace(Vector3.TransformNormal(new Vector3(0, 0, -cameraSpeed), camera.getWorldMatrix()));
+    }
+    if (inputAxes['moveLeft'] !== 0) {
+      camera.target.addInPlace(Vector3.TransformNormal(new Vector3(-cameraSpeed, 0, 0), camera.getWorldMatrix()));
+    }
+
   }
 
   public enable() {
