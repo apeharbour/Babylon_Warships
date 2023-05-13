@@ -1,7 +1,6 @@
-import * as BABYLON from 'babylonjs';
-import { SkyMaterial, WaterMaterial } from 'babylonjs-materials';
+import * as BABYLON from '@babylonjs/core';
+import { SkyMaterial, WaterMaterial } from '@babylonjs/materials';
 import store from 'store';
-
 
 const {
   ArcRotateCamera,
@@ -12,7 +11,6 @@ const {
   Tools,
   Color3,
 } = BABYLON;
-
   
 import { GameManager } from '../../Framework/Core/GameManager';
 import { WorldInterface } from '../../Framework/Worlds/World';
@@ -23,11 +21,15 @@ import {
   GAME_SERVER_HOST,
   GAME_SERVER_PORT,
 } from '../Config';
+import { Player } from '../Player';
+
   
   export class HexWorld extends AbstractNetworkWorld {
     public networkHost: string = GAME_SERVER_HOST;
     public networkPort: number = GAME_SERVER_PORT;
     public groundSize: number = 128;
+    private _player: Player;
+
     start() {
       super.start();
   
@@ -39,6 +41,16 @@ import {
             this.prepareCamera();
             this.prepareLights();
             this.prepareEnvironment();
+
+                        // Initialize the player
+            this._player = new Player(this.scene);
+            this._player.load().then(() => {
+              console.log("Player loaded successfully");
+            }).catch((error) => {
+              console.error("Error loading player: ", error);
+            });
+
+            
             this.prepareNetwork();
       
             // Hide preloader
@@ -46,7 +58,17 @@ import {
       
             // Force pointer lock
             GameManager.inputManager.setForcePointerLock(true);
-      
+
+            this.scene.onPointerObservable.add((pointerInfo) => {
+              switch (pointerInfo.type) {
+                case BABYLON.PointerEventTypes.POINTERDOWN:
+                  if (pointerInfo.pickInfo.hit) {
+                    this._player.setTargetPosition(pointerInfo.pickInfo.pickedPoint);
+                  }
+                  break;
+              }
+            });
+
             resolve(this);
       });
     }
@@ -105,17 +127,17 @@ import {
 
     //const water = new WaterMaterial("water", this.scene);
     //water.bumpTexture = new BABYLON.Texture("../Recources/textures/waterbump.png", this.scene); // Set the bump texture
-  	// Water properties
-	//water.windForce = -5;
-	//water.waveHeight = 1.3;
-	//water.windDirection = new BABYLON.Vector2(1, 1);
-	//water.waterColor = new BABYLON.Color3(0.1, 0.1, 0.6);
-	//water.colorBlendFactor = 0.3;
-	//water.bumpHeight = 0.1;
-	//water.waveLength = 0.1;
-	
-	// Add skybox and ground to the reflection and refraction
-	//water.addToRenderList(skybox);
+      // Water properties
+    //water.windForce = -5;
+    //water.waveHeight = 1.3;
+    //water.windDirection = new BABYLON.Vector2(1, 1);
+    //water.waterColor = new BABYLON.Color3(0.1, 0.1, 0.6);
+    //water.colorBlendFactor = 0.3;
+    //water.bumpHeight = 0.1;
+    //water.waveLength = 0.1;
+    
+    // Add skybox and ground to the reflection and refraction
+    //water.addToRenderList(skybox);
 
     cylinder.material = block_mat;
     cylinder.setEnabled(false);
@@ -280,5 +302,9 @@ import {
         }
       }
       */
+
+      get player() {
+        return this._player;
+      }
   }
   

@@ -6,8 +6,8 @@ import {
   StandardMaterial,
   Tools,
   Color3,
-} from 'babylonjs';
-import { SkyMaterial } from 'babylonjs-materials';
+} from '@babylonjs/core';
+import { SkyMaterial } from '@babylonjs/materials';
 
 import {
   AbstractWorld,

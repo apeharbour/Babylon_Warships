@@ -6,10 +6,10 @@ import {
   StandardMaterial,
   Tools,
   Color3,
-} from 'babylonjs';
+} from '@babylonjs/core';
 import {
   SkyMaterial,
-} from 'babylonjs-materials';
+} from '@babylonjs/materials';
 import store from 'store';
 
 import { GameManager } from '../../Framework/Core/GameManager';

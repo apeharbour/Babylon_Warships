@@ -1,7 +1,7 @@
 import {
   Scene,
   Observable,
-} from 'babylonjs';
+} from '@babylonjs/core';
 
 import {
   ControllerInterface,
