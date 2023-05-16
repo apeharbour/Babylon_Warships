@@ -7,6 +7,11 @@
   resolved "https://registry.npmjs.org/@babylonjs/core/-/core-6.3.1.tgz"
   integrity sha512-VShcryUF+H55cJ556Ki9yBQJCIMMALsin1dFHFmdG4VUKlDf9AVj5WbvSmAtr0dRNJZop+RNRrteKHHqVEOYyA==
 
+"@babylonjs/loaders@^6.3.1":
+  version "6.3.1"
+  resolved "https://registry.npmjs.org/@babylonjs/loaders/-/loaders-6.3.1.tgz"
+  integrity sha512-YeosnXHd/h4HewAiCokJ3O5y9XZIpQG4WieriK3xcMtIagw1nx8w31iXv9eXSiZTMFHWcAsvCiEl7GcmppjydQ==
+
 "@babylonjs/materials@^6.3.1":
   version "6.3.1"
   resolved "https://registry.npmjs.org/@babylonjs/materials/-/materials-6.3.1.tgz"
@@ -732,6 +737,11 @@ autoprefixer@^10.2.4:
     normalize-range "^0.1.2"
     picocolors "^1.0.0"
     postcss-value-parser "^4.1.0"
+
+babylonjs-gltf2interface@^6.0.0:
+  version "6.3.1"
+  resolved "https://registry.npmjs.org/babylonjs-gltf2interface/-/babylonjs-gltf2interface-6.3.1.tgz"
+  integrity sha512-22LBxAhcIVQvhdj6WDYDitD1aDy+k+hBcFNoisrNr+umyhV9fMx56RJ4HwkDd0yXvhP3D46TL+cv9RX2QmvQ6A==
 
 babylonjs-gltf2interface@5.0.0-alpha.65:
   version "5.0.0-alpha.65"

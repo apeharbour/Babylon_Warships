@@ -1,6 +1,14 @@
-import { Mesh, Scene, Vector3 } from "@babylonjs/core";
+import { Mesh, Scene, Vector3, SceneLoader, AssetContainer, } from "@babylonjs/core";
 import { GameManager } from "../Framework/Core/GameManager";
+import { GLTFFileLoader } from '@babylonjs/loaders';
 
+
+
+
+// Register the GLTF file loader
+SceneLoader.RegisterPlugin(new GLTFFileLoader());
+
+// ...
 export class Player {
   private _mesh: Mesh;
   private _scene: Scene;
@@ -9,30 +17,37 @@ export class Player {
   constructor(scene: Scene) {
     this._scene = scene;
     this._targetPosition = Vector3.Zero();
+
   }
 
+  
+
   public async load(): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-      const playerModelUrl = '../Resources/models/yacht.glb';
+    return new Promise((resolve, reject) => {
+      const playerModelUrl = "../​Resources/​models/​yacht.glb";
   
-      const loadMeshTask = GameManager.assetManager.addMeshTask(
-        "playerTask", // Task Name
-        "",           // Mesh Name(s)
-        playerModelUrl, // Root URL
-        ""            // Scene File Name
+      SceneLoader.LoadAssetContainer(
+        "",
+        playerModelUrl,
+        this._scene,
+        (container: AssetContainer) => {
+          if (container.meshes.length > 0) {
+            // Cast the first mesh to a Mesh object
+            this._mesh = container.meshes[0] as Mesh;
+            resolve();
+          } else {
+            reject(new Error('No meshes found in the player model'));
+          }
+        },
+        null, 
+        (message, exception) => {
+          // Handle errors during loading
+          reject(exception);
+        }
       );
-  
-      loadMeshTask.onSuccess = (task) => {
-        this._mesh = task.loadedMeshes[0] as Mesh;  // Type assertion
-        resolve();
-      }
-  
-      loadMeshTask.onError = (task, message, exception) => {
-        console.error(message, exception);
-        reject(exception);
-      }
     });
   }
+  
   
 
   public update(deltaTime: number): void {

@@ -127,7 +127,7 @@ import { Player } from '../Player';
 
     //const water = new WaterMaterial("water", this.scene);
     //water.bumpTexture = new BABYLON.Texture("../Recources/textures/waterbump.png", this.scene); // Set the bump texture
-      // Water properties
+       //Water properties
     //water.windForce = -5;
     //water.waveHeight = 1.3;
     //water.windDirection = new BABYLON.Vector2(1, 1);
@@ -136,14 +136,15 @@ import { Player } from '../Player';
     //water.bumpHeight = 0.1;
     //water.waveLength = 0.1;
     
-    // Add skybox and ground to the reflection and refraction
+    //Add skybox and ground to the reflection and refraction
     //water.addToRenderList(skybox);
+    //water.addToRenderList(cylinder);
 
     cylinder.material = block_mat;
     cylinder.setEnabled(false);
     
     radius += 0.025; //add a small gap
-    const bigHexRadius = 42;
+    const bigHexRadius = 12;
     const height = Math.sqrt(3) * 0.5 * radius;
     let nbInCol = 2 * bigHexRadius + 1;
     const deltaCol = 1.5 * radius;
