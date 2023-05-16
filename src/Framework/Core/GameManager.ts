@@ -1,10 +1,11 @@
 import {
+  AssetsManager,
   Engine,
   EngineOptions,
   NullEngine,
   NullEngineOptions,
   Scene,
-} from 'babylonjs';
+} from '@babylonjs/core';
 import { XMLHttpRequest } from 'xhr2';
 
 import {
@@ -22,6 +23,7 @@ import {
 import {
   WorldInterface,
 } from '../Worlds/World';
+import { HexWorld } from '../../Game/Worlds/HexWorld';
 
 export class GameManager {
   public static config: GameManagerConfigInterface;
@@ -31,11 +33,11 @@ export class GameManager {
   public static canvasElement: HTMLCanvasElement | null;
   public static engine: Engine;
   public static scene: Scene;
+  public static assetManager: AssetsManager;
 
   public static world: WorldInterface;
   public static inputManager?: InputManager;
   public static controller?: ControllerInterface;
-    static assetManager: any;
 
   public static boot(config: GameManagerConfigInterface, parameters?: any): GameManager {
     this.config = config;
@@ -67,6 +69,10 @@ export class GameManager {
         true
       );
 
+      // Initialize assetManager here
+    this.assetManager = new AssetsManager(this.scene);  // Add this line to initialize assetManager
+
+
       // Loading screen
       this.engine.loadingScreen = new LoadingScreen();
     }
@@ -88,6 +94,7 @@ export class GameManager {
     }
 
     this.setWorld(this.world);
+    let previousTime = performance.now();  // Initialize previousTime
 
     // Main render loop
     this.engine.runRenderLoop(() => {
@@ -99,13 +106,26 @@ export class GameManager {
         this.inputManager.update();
       }
 
+      // Calculate delta time
+      const currentTime = performance.now();
+      const deltaTime = (currentTime - previousTime) / 1000.0;  // Convert to seconds
+      previousTime = currentTime;
+
+      if (this.world instanceof HexWorld && this.world.player) {
+        // Make sure the player and its position are defined
+        if (this.world.player && this.world.player.getMesh()) {
+          // Call the player's update method
+          this.world.player.update(deltaTime);  // Pass the delta time
+        }
+
       this.world.update();
       this.scene.render();
 
       if (this.inputManager) {
         this.inputManager.afterRender();
       }
-    });
+    }
+  });
 
     /***** Events *****/
     window.addEventListener('resize', () => {

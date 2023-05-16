@@ -2,15 +2,20 @@
 # yarn lockfile v1
 
 
-"@babylonjs/core@^6.0.0", "@babylonjs/core@^6.2.0":
-  version "6.2.0"
-  resolved "https://registry.npmjs.org/@babylonjs/core/-/core-6.2.0.tgz"
-  integrity sha512-Tr3gj20/t3tZGlq7bvaeAPkHQV2B6hqHJsu/1KiRcmK461kRbO0O3kghXqhoGOCegYkIkMfJbgPXAYk+xhe1pg==
+"@babylonjs/core@^6.0.0", "@babylonjs/core@^6.3.1":
+  version "6.3.1"
+  resolved "https://registry.npmjs.org/@babylonjs/core/-/core-6.3.1.tgz"
+  integrity sha512-VShcryUF+H55cJ556Ki9yBQJCIMMALsin1dFHFmdG4VUKlDf9AVj5WbvSmAtr0dRNJZop+RNRrteKHHqVEOYyA==
 
-"@babylonjs/materials@^6.2.0":
-  version "6.2.0"
-  resolved "https://registry.npmjs.org/@babylonjs/materials/-/materials-6.2.0.tgz"
-  integrity sha512-7iJxr/yHwnqDLHMFRk2ifui6YRFKL3btdsWDlhMBxmrI2QTLm8b5n5Mt0SZUjGRHacU7yG9gJ1t46EOOpaCe1w==
+"@babylonjs/loaders@^6.3.1":
+  version "6.3.1"
+  resolved "https://registry.npmjs.org/@babylonjs/loaders/-/loaders-6.3.1.tgz"
+  integrity sha512-YeosnXHd/h4HewAiCokJ3O5y9XZIpQG4WieriK3xcMtIagw1nx8w31iXv9eXSiZTMFHWcAsvCiEl7GcmppjydQ==
+
+"@babylonjs/materials@^6.3.1":
+  version "6.3.1"
+  resolved "https://registry.npmjs.org/@babylonjs/materials/-/materials-6.3.1.tgz"
+  integrity sha512-vHh4lr6yw0q2X9P2bPA7EQVFlGXW67qPckIUgM1ofK3XgT/n4bdgIZlGg8chYr0IanRM+WLQf682nO1UCv1yLA==
 
 "@colyseus/core@^0.14.20":
   version "0.14.24"
@@ -733,6 +738,11 @@ autoprefixer@^10.2.4:
     picocolors "^1.0.0"
     postcss-value-parser "^4.1.0"
 
+babylonjs-gltf2interface@^6.0.0:
+  version "6.3.1"
+  resolved "https://registry.npmjs.org/babylonjs-gltf2interface/-/babylonjs-gltf2interface-6.3.1.tgz"
+  integrity sha512-22LBxAhcIVQvhdj6WDYDitD1aDy+k+hBcFNoisrNr+umyhV9fMx56RJ4HwkDd0yXvhP3D46TL+cv9RX2QmvQ6A==
+
 babylonjs-gltf2interface@5.0.0-alpha.65:
   version "5.0.0-alpha.65"
   resolved "https://registry.npmjs.org/babylonjs-gltf2interface/-/babylonjs-gltf2interface-5.0.0-alpha.65.tgz"
@@ -765,7 +775,7 @@ babylonjs-loaders@^5.0.0-alpha.65, babylonjs-loaders@5.0.0-alpha.65:
     babylonjs "5.0.0-alpha.65"
     babylonjs-gltf2interface "5.0.0-alpha.65"
 
-babylonjs-materials@^5.0.0-alpha.65, babylonjs-materials@5.0.0-alpha.65:
+babylonjs-materials@5.0.0-alpha.65:
   version "5.0.0-alpha.65"
   resolved "https://registry.npmjs.org/babylonjs-materials/-/babylonjs-materials-5.0.0-alpha.65.tgz"
   integrity sha512-EQJEVwPLmLP3/B6C+8EA0OdSt5lUtuv+UmDX4NusB/CrUxrjtkeSzmMXO7aRmdg0OrBXd/b4BWpNfhjv3mcebA==
@@ -779,11 +789,6 @@ babylonjs-serializers@5.0.0-alpha.65:
   dependencies:
     babylonjs "5.0.0-alpha.65"
     babylonjs-gltf2interface "5.0.0-alpha.65"
-
-babylonjs@^6.2.0:
-  version "6.2.0"
-  resolved "https://registry.npmjs.org/babylonjs/-/babylonjs-6.2.0.tgz"
-  integrity sha512-TtUbRonHjEdJ2AzlQ1LpDHgnJAyrugDIcWLLPIy768JRoEM2WNlp6GcK7dv1ke/o9RKR3TNRodK/bMXL+h6WHw==
 
 babylonjs@5.0.0-alpha.65:
   version "5.0.0-alpha.65"

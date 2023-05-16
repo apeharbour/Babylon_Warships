@@ -1,6 +1,6 @@
 import {
   TransformNode,
-} from 'babylonjs';
+} from '@babylonjs/core';
 
 export class NetworkSerializer {
   public static serializeTransformNode(transformNode: TransformNode, precision: number = 5): string {

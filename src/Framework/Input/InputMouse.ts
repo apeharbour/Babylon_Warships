@@ -1,6 +1,6 @@
 import {
   Observable,
-} from 'babylonjs';
+} from '@babylonjs/core';
 
 import {
   GameManager,

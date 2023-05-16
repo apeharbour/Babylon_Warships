@@ -1,6 +1,6 @@
 import {
   Observable,
-} from 'babylonjs';
+} from '@babylonjs/core';
 
 export class InputGamepad {
   public index: number;

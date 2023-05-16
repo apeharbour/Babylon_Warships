@@ -1,6 +1,6 @@
 import {
   ILoadingScreen,
-} from 'babylonjs';
+} from '@babylonjs/core';
 
 export class LoadingScreen implements ILoadingScreen {
   public loadingUIText: string;

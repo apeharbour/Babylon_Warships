@@ -2,7 +2,7 @@ import {
   TransformNode,
   Vector3,
   Quaternion,
-} from 'babylonjs';
+} from '@babylonjs/core';
 import {
   Client,
   Room,

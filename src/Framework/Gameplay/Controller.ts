@@ -3,7 +3,7 @@ import {
   Vector2,
   Vector3,
   ArcRotateCamera,
-} from 'babylonjs';
+} from '@babylonjs/core';
 
 import {
   GameManager,
