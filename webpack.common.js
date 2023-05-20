@@ -2,6 +2,9 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
 
 module.exports = {
   entry: {
@@ -48,6 +51,12 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.(glb)$/,
+        use: [
+          'file-loader'
+        ]
+      }      
     ],
   },
   resolve: {
@@ -65,10 +74,31 @@ module.exports = {
     new CleanWebpackPlugin({
       cleanStaleWebpackAssets: false,
     }),
+    new CopyPlugin({
+      patterns: [
+        { from: 'src/Resources/models', to: 'Resources/models' },
+      ],
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { 
+          from: './src/Resources', 
+          to: 'Resources' 
+        }
+      ]
+    }),
   ],
   output: {
     filename: 'static/js/[name].[fullhash:8].js',
     chunkFilename: 'static/js/[name].[fullhash:8].chunk.js',
     path: path.resolve(__dirname, 'dist'),
   },
+  devServer: {
+    static: {
+      directory: path.join(__dirname, 'src/Resources/models'),
+    },
+    compress: true,
+    port: 8080,
+  }
+  
 };

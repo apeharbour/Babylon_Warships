@@ -74,30 +74,48 @@ import { Player } from '../Player';
     }
   
     prepareCamera() {
-        let cameraTarget = new Vector3(0, 0, 0); // Set the target point for the camera to rotate around
-      
-        let camera = new ArcRotateCamera(
-          'camera',
-          Tools.ToRadians(0),
-          Tools.ToRadians(60),
-          10,
-          cameraTarget,
-          this.scene
-        );
-      
-        camera.lowerBetaLimit = Tools.ToRadians(10);
-        camera.upperBetaLimit = Tools.ToRadians(80);
-        camera.lowerRadiusLimit = 10;
-        camera.upperRadiusLimit = 20;
-      
-        this.scene.activeCamera = camera;
-        this.scene.activeCamera.attachControl(this.scene.getEngine().getRenderingCanvas());
-      
-        // Enable camera movement using keyboard and mouse
-        camera.inputs.add(new BABYLON.ArcRotateCameraKeyboardMoveInput());
-        camera.inputs.add(new BABYLON.ArcRotateCameraMouseWheelInput());
-        camera.inputs.add(new BABYLON.ArcRotateCameraPointersInput());
-      }
+// Assuming you have a valid Babylon.js scene
+let scene: BABYLON.Scene;
+
+// Create a UniversalCamera, set its position, and attach it to the canvas
+let camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(0, 0, -10), scene);
+
+// Set the target of the camera
+camera.setTarget(BABYLON.Vector3.Zero());
+
+// This applies to the canvas being used for rendering
+let canvas: HTMLCanvasElement;
+
+// Attach control to the canvas
+camera.attachControl(canvas, true);
+
+
+// These values of alpha, beta and radius are just example values
+let alpha = Math.PI / 2;
+let beta = Math.PI / 2;
+let radius = 2;
+
+// Create a target for the camera
+let target = new BABYLON.Vector3(0, 0, 0);
+
+// The attachControl function will allow the camera to respond to mouse events
+camera.attachControl(canvas, true);
+
+// You can set the keys for moving forward, back, left, and right. For example:
+camera.keysUp.push(87);    // "W"
+camera.keysDown.push(83);  // "S"
+camera.keysLeft.push(65);  // "A"
+camera.keysRight.push(68); // "D"
+
+
+
+
+
+
+
+
+  }
+  
       
   
     prepareLights() {
@@ -113,37 +131,44 @@ import { Player } from '../Player';
       let skybox = MeshBuilder.CreateBox('skybox', {
         size: 1024,
       }, this.scene);
-      var skyboxMaterial = new SkyMaterial('skyboxMaterial', this.scene);
+      var skyboxMaterial = new StandardMaterial('skyBox', this.scene);
+  
+      
+      skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("../Resources/textures/skybox", this.scene);
+      skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
       skyboxMaterial.backFaceCulling = false;
-      skyboxMaterial.useSunPosition = true;
-      skyboxMaterial.sunPosition = new Vector3(0, 100, 0);
+      //skyboxMaterial.useSunPosition = true;
+      //skyboxMaterial.sunPosition = new Vector3(0, 100, 0);
+      skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+      skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
       skybox.material = skyboxMaterial;
   
       // Ground
-      let radius = 0.5;
-    const cylinder = MeshBuilder.CreateCylinder("cylinder", {tessellation: 6, height:0.3, diameter: 2 * radius}, this.scene);
-    const block_mat = new StandardMaterial("block_mat", this.scene);
-    block_mat.diffuseColor = Color3.Blue();
-
-    //const water = new WaterMaterial("water", this.scene);
-    //water.bumpTexture = new BABYLON.Texture("../Recources/textures/waterbump.png", this.scene); // Set the bump texture
+      let radius = 7.5;
+    const cylinder = MeshBuilder.CreateCylinder("cylinder", {tessellation: 6, height:0.01, diameter: 2 * radius}, this.scene);
+    //const block_mat = new StandardMaterial("block_mat", this.scene);
+    //block_mat.diffuseColor = Color3.Blue();
+     // const waterMesh = new BABYLON.Mesh("waterMesh", this.scene);
+    const water = new WaterMaterial("water", this.scene);
+    water.bumpTexture = new BABYLON.Texture("../Resources/textures/waterbump.png", this.scene); // Set the bump texture
        //Water properties
-    //water.windForce = -5;
-    //water.waveHeight = 1.3;
-    //water.windDirection = new BABYLON.Vector2(1, 1);
-    //water.waterColor = new BABYLON.Color3(0.1, 0.1, 0.6);
-    //water.colorBlendFactor = 0.3;
-    //water.bumpHeight = 0.1;
-    //water.waveLength = 0.1;
+       water.backFaceCulling = true;
+    water.windForce = -10;
+    water.waveHeight = 0.05;
+    water.windDirection = new BABYLON.Vector2(1, 1);
+    water.waterColor = new BABYLON.Color3(0, 0, 221 / 255);
+    water.colorBlendFactor = 0.0;
+    water.bumpHeight = 0.01;
+    water.waveLength = 0.1;
     
     //Add skybox and ground to the reflection and refraction
-    //water.addToRenderList(skybox);
+    water.addToRenderList(skybox);
     //water.addToRenderList(cylinder);
 
-    cylinder.material = block_mat;
+    cylinder.material = water;
     cylinder.setEnabled(false);
     
-    radius += 0.025; //add a small gap
+    radius += 0.5; //add a small gap
     const bigHexRadius = 12;
     const height = Math.sqrt(3) * 0.5 * radius;
     let nbInCol = 2 * bigHexRadius + 1;
