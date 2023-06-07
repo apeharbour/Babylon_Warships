@@ -1,5 +1,6 @@
 import * as BABYLON from '@babylonjs/core';
 import { SkyMaterial, WaterMaterial } from '@babylonjs/materials';
+import { HexTile } from '../HexTile';
 import store from 'store';
 
 const {
@@ -10,6 +11,8 @@ const {
   StandardMaterial,
   Tools,
   Color3,
+  Scene,
+  Mesh,
 } = BABYLON;
   
 import { GameManager } from '../../Framework/Core/GameManager';
@@ -29,11 +32,20 @@ import { Player } from '../Player';
     public networkPort: number = GAME_SERVER_PORT;
     public groundSize: number = 128;
     private _player: Player;
+    private hexTiles: HexTile[] = [];
+
+    
 
     start() {
       super.start();
-  
+    
       this.scene.getEngine().displayLoadingUI();
+    
+      window.addEventListener('keyup', (event) => {
+        if (event.key === 'Enter') {
+          this.logWorldState();
+        }
+      });
     }
   
     load(): Promise<WorldInterface> {
@@ -62,12 +74,21 @@ import { Player } from '../Player';
             this.scene.onPointerObservable.add((pointerInfo) => {
               switch (pointerInfo.type) {
                 case BABYLON.PointerEventTypes.POINTERDOWN:
-                  if (pointerInfo.pickInfo.hit) {
-                    this._player.setTargetPosition(pointerInfo.pickInfo.pickedPoint);
+                  const pickResult = this.scene.pick(pointerInfo.event.clientX, pointerInfo.event.clientY);
+                  if (pickResult && pickResult.hit) {
+                    const clickedMesh = pickResult.pickedMesh;
+                    if (clickedMesh instanceof BABYLON.InstancedMesh) {
+                      this.player.setTargetPosition(clickedMesh.position);
+                      this.player._isMoving = true;
+                      this.player._isTurning = true;
+                    }
                   }
                   break;
+                
+                
               }
             });
+            
 
             resolve(this);
       });
@@ -78,7 +99,7 @@ import { Player } from '../Player';
 let scene: BABYLON.Scene;
 
 // Create a UniversalCamera, set its position, and attach it to the canvas
-let camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(0, 0, -10), scene);
+let camera = new BABYLON.UniversalCamera("UniversalCamera", new BABYLON.Vector3(0, 50, 0), scene);
 
 // Set the target of the camera
 camera.setTarget(BABYLON.Vector3.Zero());
@@ -108,6 +129,17 @@ camera.keysLeft.push(65);  // "A"
 camera.keysRight.push(68); // "D"
 
 
+        // Create cursor
+        let cursor = BABYLON.Mesh.CreateSphere('cursor', 16, 0.1, this.scene);
+        cursor.position = new BABYLON.Vector3(0, 0, 1); // initial position
+      
+
+        // Update cursor position before each render
+        this.scene.registerBeforeRender(() => {
+            let forward = this.scene.activeCamera.getForwardRay().direction.scale(10); // 10 units in front of the camera
+            cursor.position = this.scene.activeCamera.position.add(forward);
+        });
+    
 
 
 
@@ -143,6 +175,8 @@ camera.keysRight.push(68); // "D"
       skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
       skybox.material = skyboxMaterial;
   
+ 
+        // Use your existing code to generate the hexagonal grid here...
       // Ground
       let radius = 7.5;
     const cylinder = MeshBuilder.CreateCylinder("cylinder", {tessellation: 6, height:0.01, diameter: 2 * radius}, this.scene);
@@ -153,13 +187,13 @@ camera.keysRight.push(68); // "D"
     water.bumpTexture = new BABYLON.Texture("../Resources/textures/waterbump.png", this.scene); // Set the bump texture
        //Water properties
        water.backFaceCulling = true;
-    water.windForce = -10;
-    water.waveHeight = 0.05;
+    water.windForce = 10;
+    water.waveHeight = 0.1;
     water.windDirection = new BABYLON.Vector2(1, 1);
-    water.waterColor = new BABYLON.Color3(0, 0, 221 / 255);
-    water.colorBlendFactor = 0.0;
-    water.bumpHeight = 0.01;
-    water.waveLength = 0.1;
+    water.waterColor = new BABYLON.Color3(0.1, 0, 1);
+    water.colorBlendFactor = 0.3;
+    water.bumpHeight = 0.03;
+    water.waveLength = 0.3;
     
     //Add skybox and ground to the reflection and refraction
     water.addToRenderList(skybox);
@@ -181,6 +215,11 @@ camera.keysRight.push(68); // "D"
     for(let i = 0; i < nbInCol; i++) {
         const instance = cylinder.createInstance("ins_cy" + (hexCount++))
         instance.position = new BABYLON.Vector3(colStartAt, 0, currentRow);
+
+      // Create a HexTile for each hexagon and store it in the hexTiles array
+      const hexTile = new HexTile(cylinder, instance.position, radius);
+      this.hexTiles.push(hexTile);
+
         currentRow += 2 * height;
     }
     colStartAt += deltaCol;
@@ -200,8 +239,9 @@ camera.keysRight.push(68); // "D"
         currentRow = rowStartAt;
         nbInCol--;
     }
-
     }
+
+    
   
     prepareInspector() {
       this.scene.debugLayer.show();
@@ -332,5 +372,70 @@ camera.keysRight.push(68); // "D"
       get player() {
         return this._player;
       }
+
+      getNearestHexCenter(point: BABYLON.Vector3): BABYLON.Vector3 {
+        const hexSize = 1; // Set this to the size of your hexagons
+        const x = point.x;
+        const z = point.z;
+    
+        const a = Math.floor(x / (hexSize * 3/2));
+        const b = Math.floor((x / (hexSize * 3/2) - Math.floor(x / (hexSize * 3/2)) + z / (hexSize * Math.sqrt(3))) / 2);
+        const c = Math.floor((z / (hexSize * Math.sqrt(3))) - b);
+    
+        const candidateHexCenter1 = new BABYLON.Vector3(
+            hexSize * 3/2 * a,
+            0, 
+            hexSize * Math.sqrt(3) * (b + c)
+        );
+    
+        const candidateHexCenter2 = new BABYLON.Vector3(
+            hexSize * 3/2 * (a + 1),
+            0,
+            hexSize * Math.sqrt(3) * (b + c + 1)
+        );
+    
+        if (BABYLON.Vector3.DistanceSquared(point, candidateHexCenter1) < BABYLON.Vector3.DistanceSquared(point, candidateHexCenter2)) {
+            return candidateHexCenter1;
+        } else {
+            return candidateHexCenter2;
+        }
+    }
+    
+    private getHexCenter(position: BABYLON.Vector3): BABYLON.Vector3 {
+      const radius = 7.5;
+     // const bigHexRadius = 12;
+      const height = Math.sqrt(3) * 0.5 * radius;
+      const deltaCol = 1.5 * radius;
+    
+      // Berechnen Sie die Spalte und Reihe basierend auf der Position
+      const col = Math.round(position.x / deltaCol);
+      const row = Math.round(position.z / (2 * height));
+    
+      // Berechnen Sie die Position des Zentrums des nächstgelegenen Hexagons
+      const hexX = col * deltaCol;
+      const hexZ = row * 2 * height + (col % 2 === 0 ? 0 : height);
+    
+      return new Vector3(hexX, position.y, hexZ);
+    }
+
+
+  
+      // Gets the HexTile at a given position
+  getHexTileAt(position: BABYLON.Vector3): HexTile {
+    const hexCenter = this.getHexCenter(position);
+    return this.hexTiles.find(hexTile => hexTile.center.equals(hexCenter));
   }
+
+  logWorldState() {
+    let worldState = {
+        playerPosition: this.player.getPosition(),
+        playerTarget: this.player.getTargetPosition(),
+        hexTiles: this.hexTiles  // Directly use the hexTiles array
+    };
+    console.log(worldState);
+  }
+
+  }
+
+
   
