@@ -1,7 +1,11 @@
 import * as BABYLON from '@babylonjs/core';
+import { GLTFFileLoader } from '@babylonjs/loaders';
 import { SkyMaterial, WaterMaterial } from '@babylonjs/materials';
 import { HexTile } from '../HexTile';
 import store from 'store';
+
+ // Register the GLTF loader plugin
+ BABYLON.SceneLoader.RegisterPlugin(new GLTFFileLoader());
 
 const {
   ArcRotateCamera,
@@ -54,14 +58,39 @@ import { Player } from '../Player';
             this.prepareLights();
             this.prepareEnvironment();
 
-                        // Initialize the player
-            this._player = new Player(this.scene);
-            this._player.load().then(() => {
-              console.log("Player loaded successfully");
-            }).catch((error) => {
-              console.error("Error loading player: ", error);
-            });
+             // Register the GLTF loader plugin
+             //BABYLON.SceneLoader.RegisterPlugin(new GLTFFileLoader());
 
+            // Initialize the players
+            const playerModels = [
+              "/Resources/models/yacht2.glb", 
+              "/Resources/models/1067.glb", 
+              "/Resources/models/2186.glb", 
+              "/Resources/models/2774.glb",
+              /* more model paths... */
+            ];
+            
+            const initialPositions = [new Vector3(0, 0, 0), new Vector3(10, 0, 0), new Vector3(20, 0, 0), new Vector3(30, 0, 0) /* more initial positions... */];
+            
+            // Register the GLTF loader plugin
+//            BABYLON.SceneLoader.RegisterPlugin(new GLTFFileLoader());
+
+            const players = playerModels.map((modelPath, index) => {
+              const player = new Player(this.scene, modelPath, initialPositions[index]);
+              return player;
+            });
+            
+            Promise.all(players.map(player => player.load()))
+            .then(() => {
+              console.log("All player models loaded successfully");
+            })
+            .catch((error) => {
+              console.error("Error loading player models: ", error);
+            });
+            
+          
+
+            // ... more setup code ...
             
             this.prepareNetwork();
       
@@ -166,7 +195,7 @@ camera.keysRight.push(68); // "D"
       var skyboxMaterial = new StandardMaterial('skyBox', this.scene);
   
       
-      skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("../Resources/textures/skybox", this.scene);
+      skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("/Resources/textures/skybox", this.scene);
       skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
       skyboxMaterial.backFaceCulling = false;
       //skyboxMaterial.useSunPosition = true;
@@ -184,7 +213,7 @@ camera.keysRight.push(68); // "D"
     //block_mat.diffuseColor = Color3.Blue();
      // const waterMesh = new BABYLON.Mesh("waterMesh", this.scene);
     const water = new WaterMaterial("water", this.scene);
-    water.bumpTexture = new BABYLON.Texture("../Resources/textures/waterbump.png", this.scene); // Set the bump texture
+    water.bumpTexture = new BABYLON.Texture("Resources/textures/waterbump.png", this.scene); // Set the bump texture
        //Water properties
        water.backFaceCulling = true;
     water.windForce = 10;
@@ -275,99 +304,6 @@ camera.keysRight.push(68); // "D"
         });
       }
 
-    /*
-    //prepare player movement
-      prepareNetworkToReplicateTransformsMovement() {
-        super.prepareNetworkToReplicateTransformsMovement();
-    
-        const networkRoomState = <RoomState>this.networkRoom.state;
-    
-        // Transforms
-        this.networkRoom.onStateChange.once((state: RoomState) => {
-          state.transforms.forEach((transform: Transform) => {
-            this.prepareNetworkTransform(transform);
-          });
-        });
-    
-        networkRoomState.transforms.onAdd = (transform: Transform) => {
-          this.prepareNetworkTransform(transform);
-        };
-    
-        networkRoomState.transforms.onRemove = (transform: Transform) => {
-          this.scene.getMeshById(transform.id)?.dispose();
-        };
-      }
-    
-      //create player instance
-      
-      prepareNetworkTransform(transform: Transform) {
-        if (transform.type === 'player') {
-          const existingTransform = this.scene.getNodeById(transform.id);
-          if (existingTransform) {
-            return;
-          }
-          //create player mesh
-          let transformMesh = MeshBuilder.CreateCylinder(transform.id, {
-            height: 2,
-          }, this.scene);
-    
-          transformMesh.position = new Vector3(
-            transform.position.x,
-            transform.position.y,
-            transform.position.z
-          );
-          transformMesh.rotation = new Vector3(
-            transform.rotation.x,
-            transform.rotation.y,
-            transform.rotation.z
-          );
-    
-          if (transform.sessionId === this.networkRoomSessionId) {
-            this.controller.posessTransformNode(transformMesh);
-            this.prepareNetworkReplicateMovementForLocalTransform(transformMesh);
-          } else {
-            // Sync metadata
-            if (
-              !transformMesh.metadata ||
-              !transformMesh.metadata.network
-            ) {
-              this.prepareTransformNodeNetworkMetadata(transformMesh);
-            }
-    
-            transformMesh.metadata.network.serverData = {
-              position: new Vector3(
-                transform.position.x,
-                transform.position.y,
-                transform.position.z
-              ),
-              rotation: new Vector3(
-                transform.rotation.x,
-                transform.rotation.y,
-                transform.rotation.z
-              ),
-            };
-    
-            transform.rotation.onChange = (changes) => {
-              let newValue = transformMesh.rotation.clone();
-              changes.forEach((change) => {
-                newValue[change.field] = change.value;
-              });
-              transformMesh.metadata.network.serverData.rotation = newValue;
-              transformMesh.metadata.network.serverLastUpdate = (new Date()).getTime();
-            };
-    
-            transform.position.onChange = (changes) => {
-              let newValue = transformMesh.position.clone();
-              changes.forEach((change) => {
-                newValue[change.field] = change.value;
-              });
-              transformMesh.metadata.network.serverData.position = newValue;
-              transformMesh.metadata.network.serverLastUpdate = (new Date()).getTime();
-            };
-          }
-        }
-      }
-      */
 
       get player() {
         return this._player;

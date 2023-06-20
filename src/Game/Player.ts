@@ -10,6 +10,7 @@ export class Player {
   private _mesh: Mesh;
   private _scene: Scene;
   private _targetPosition: Vector3; 
+  private _initialPosition: Vector3;
   public _isMoving: boolean = false;
   public _isTurning: boolean = false;
   private _currentDirection: Vector3;
@@ -17,30 +18,20 @@ export class Player {
   private _maxTurn: number; // The maximum amount the player can turn, in degrees
   private _targetAngle: number; // The angle that the player is trying to turn to
   private _position: Vector3;
+  private _modelPath: string;
 
 
-  constructor(scene: Scene) {
+  constructor(scene: Scene, modelPath: string, initialPosition: Vector3) {
     this._scene = scene;
     this._targetPosition = Vector3.Zero();
     this._isMoving = false;
     this._isTurning = false;
-
+    this._initialPosition = initialPosition.clone();
+    this._position = initialPosition.clone();
+    this._modelPath = modelPath;
+  
     // Set forward direction based on model's orientation
     this._currentDirection = new Vector3(0, 1, 0);  // Replace with your model's forward vector
-/*
-    // Adjust forward direction if necessary
-    const yToZRotation = Quaternion.RotationAxis(Vector3.Down(), Math.PI / 2);
-    let yToZRotationMatrix = new Matrix();
-    yToZRotation.toRotationMatrix(yToZRotationMatrix);
-    
-    this._currentDirection = Vector3.TransformNormal(this._currentDirection, yToZRotationMatrix);
-*/
-    
-    
-    
-    
-    
-
     this._turnStepSize = 60; // Adjust as needed
     this._maxTurn = 360; // Adjust as needed
 
@@ -57,18 +48,23 @@ export class Player {
           break;
       }
     });
+
+    this.load();
   }
 
   public async load(): Promise<void> {
+    console.log(`Loading model from: ${this._modelPath}`); // Debug print statement
+
     return new Promise((resolve, reject) => {
       SceneLoader.LoadAssetContainer(
         "",
-        "../Resources/models/yacht2.glb",
+        this._modelPath,
         this._scene,
         (container: AssetContainer) => {
           container.addAllToScene();
           if (container.meshes.length > 0) {
             this._mesh = container.meshes[0] as Mesh;
+            this._mesh.position = this._initialPosition; // Set the mesh position here
             this._position = this._mesh.position.clone(); // Update _position here
             // Rest of the code...
           //  this._mesh.addRotation(0, Math.PI/2, 0);
@@ -84,6 +80,7 @@ export class Player {
       );
     });
   }
+  
 
   public update(deltaTime: number): void {
     this.updateRotation(deltaTime);

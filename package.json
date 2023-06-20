@@ -15,7 +15,7 @@
         "@types/store": "^2.0.2",
         "@types/uuid": "^3.4.9",
         "autoprefixer": "^10.2.4",
-        "babylonjs": "^6.4.0",
+        "babylonjs": "^6.8.0",
         "babylonjs-gui": "^5.0.0-alpha.65",
         "babylonjs-inspector": "^5.0.0-alpha.65",
         "babylonjs-loaders": "^5.57.1",
