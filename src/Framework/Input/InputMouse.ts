@@ -1,6 +1,3 @@
-import {
-  Observable,
-} from 'babylonjs';
 
 import {
   GameManager,
@@ -18,6 +15,7 @@ import {
   InputBindingsInterface,
   AbstractInputBindings,
 } from '../Gameplay/InputBindings';
+import { Observable } from '@babylonjs/core';
 
 export class InputMouse implements InputDeviceInterface {
   public moveObservable = new Observable<MouseEvent | PointerEvent>();

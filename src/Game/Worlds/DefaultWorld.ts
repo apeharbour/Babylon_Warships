@@ -1,14 +1,6 @@
-import {
-  ArcRotateCamera,
-  Vector3,
-  HemisphericLight,
-  MeshBuilder,
-  StandardMaterial,
-  Tools,
-  Color3,
-} from 'babylonjs';
-import { SkyMaterial } from 'babylonjs-materials';
+import { SkyMaterial } from '@babylonjs/materials'
 
+import { ArcRotateCamera, Color3, HemisphericLight, MeshBuilder, StandardMaterial, Tools, Vector3 } from '@babylonjs/core';
 import {
   AbstractWorld,
   WorldInterface,

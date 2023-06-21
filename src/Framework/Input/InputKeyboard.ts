@@ -1,8 +1,4 @@
 import {
-  Observable,
-} from 'babylonjs';
-
-import {
   GameManager,
 } from '../Core/GameManager';
 import {
@@ -16,6 +12,7 @@ import {
   InputBindingsInterface,
   AbstractInputBindings,
 } from '../Gameplay/InputBindings';
+import { Observable } from '@babylonjs/core';
 
 export class InputKeyboard implements InputDeviceInterface {
   public keyUpDownObservable = new Observable<KeyboardEvent>();

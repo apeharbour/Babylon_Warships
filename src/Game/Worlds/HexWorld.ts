@@ -1,18 +1,6 @@
-import * as BABYLON from 'babylonjs';
-import { SkyMaterial, WaterMaterial } from 'babylonjs-materials';
+import { SkyMaterial } from '@babylonjs/materials'
+
 import store from 'store';
-
-
-const {
-  ArcRotateCamera,
-  Vector3,
-  HemisphericLight,
-  MeshBuilder,
-  StandardMaterial,
-  Tools,
-  Color3,
-} = BABYLON;
-
   
 import { GameManager } from '../../Framework/Core/GameManager';
 import { WorldInterface } from '../../Framework/Worlds/World';
@@ -23,6 +11,7 @@ import {
   GAME_SERVER_HOST,
   GAME_SERVER_PORT,
 } from '../Config';
+import { ArcRotateCamera, ArcRotateCameraKeyboardMoveInput, ArcRotateCameraMouseWheelInput, ArcRotateCameraPointersInput, Color3, HemisphericLight, MeshBuilder, StandardMaterial, Tools, Vector3 } from '@babylonjs/core';
   
   export class HexWorld extends AbstractNetworkWorld {
     public networkHost: string = GAME_SERVER_HOST;
@@ -72,9 +61,9 @@ import {
         this.scene.activeCamera.attachControl(this.scene.getEngine().getRenderingCanvas());
       
         // Enable camera movement using keyboard and mouse
-        camera.inputs.add(new BABYLON.ArcRotateCameraKeyboardMoveInput());
-        camera.inputs.add(new BABYLON.ArcRotateCameraMouseWheelInput());
-        camera.inputs.add(new BABYLON.ArcRotateCameraPointersInput());
+        camera.inputs.add(new ArcRotateCameraKeyboardMoveInput());
+        camera.inputs.add(new ArcRotateCameraMouseWheelInput());
+        camera.inputs.add(new ArcRotateCameraPointersInput());
       }
       
   
@@ -132,7 +121,7 @@ import {
     //center row
     for(let i = 0; i < nbInCol; i++) {
         const instance = cylinder.createInstance("ins_cy" + (hexCount++))
-        instance.position = new BABYLON.Vector3(colStartAt, 0, currentRow);
+        instance.position = new Vector3(colStartAt, 0, currentRow);
         currentRow += 2 * height;
     }
     colStartAt += deltaCol;
@@ -142,9 +131,9 @@ import {
     while (nbInCol > bigHexRadius) {
         for(let i = 0; i < nbInCol; i++) {
             const instanceR = cylinder.createInstance("ins_cy" + (hexCount++))
-            instanceR.position = new BABYLON.Vector3(colStartAt, 0, currentRow);
+            instanceR.position = new Vector3(colStartAt, 0, currentRow);
             const instanceL = cylinder.createInstance("ins_cy" + (hexCount++))
-            instanceL.position = new BABYLON.Vector3(-colStartAt, 0, currentRow);
+            instanceL.position = new Vector3(-colStartAt, 0, currentRow);
             currentRow += 2 * height;
         }
         colStartAt += deltaCol;

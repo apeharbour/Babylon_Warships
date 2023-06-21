@@ -1,10 +1,5 @@
-import {
-  TransformNode,
-  Vector2,
-  Vector3,
-  ArcRotateCamera,
-} from 'babylonjs';
 
+import { ArcRotateCamera, TransformNode, Vector2, Vector3 } from '@babylonjs/core';
 import {
   GameManager,
 } from '../Core/GameManager';

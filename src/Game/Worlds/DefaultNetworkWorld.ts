@@ -1,15 +1,5 @@
-import {
-  ArcRotateCamera,
-  Vector3,
-  HemisphericLight,
-  MeshBuilder,
-  StandardMaterial,
-  Tools,
-  Color3,
-} from 'babylonjs';
-import {
-  SkyMaterial,
-} from 'babylonjs-materials';
+import { SkyMaterial } from '@babylonjs/materials'
+
 import store from 'store';
 
 import { GameManager } from '../../Framework/Core/GameManager';
@@ -21,6 +11,7 @@ import {
   GAME_SERVER_HOST,
   GAME_SERVER_PORT,
 } from '../Config';
+import { ArcRotateCamera, Color3, HemisphericLight, MeshBuilder, StandardMaterial, Tools, Vector3 } from '@babylonjs/core';
 
 export class DefaultNetworkWorld extends AbstractNetworkWorld {
   public networkHost: string = GAME_SERVER_HOST;

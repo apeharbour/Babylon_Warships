@@ -1,10 +1,3 @@
-import {
-  Engine,
-  EngineOptions,
-  NullEngine,
-  NullEngineOptions,
-  Scene,
-} from 'babylonjs';
 import { XMLHttpRequest } from 'xhr2';
 
 import {
@@ -22,6 +15,9 @@ import {
 import {
   WorldInterface,
 } from '../Worlds/World';
+
+import { Engine, EngineOptions, NullEngine, NullEngineOptions, Scene } from '@babylonjs/core';
+import { Player } from '../../Game/Player';
 
 export class GameManager {
   public static config: GameManagerConfigInterface;
@@ -88,6 +84,11 @@ export class GameManager {
     }
 
     this.setWorld(this.world);
+
+    // const player = new Player(this.scene)
+    // player.load().then(() => {
+    //   console.log("%cPlayer loaded!", 'green')
+    // })
 
     // Main render loop
     this.engine.runRenderLoop(() => {

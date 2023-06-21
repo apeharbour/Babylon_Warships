@@ -1,14 +1,10 @@
 import {
-  Scene,
-  Observable,
-} from 'babylonjs';
-
-import {
   ControllerInterface,
 } from '../Gameplay/Controller';
 import {
   GameManager,
 } from '../Core/GameManager';
+import { Observable, Scene } from '@babylonjs/core';
 
 export interface WorldInterface {
   scene: Scene;

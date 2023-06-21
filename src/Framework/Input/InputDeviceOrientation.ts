@@ -1,14 +1,11 @@
 import {
-  Observable,
-} from 'babylonjs';
-
-import {
   InputDeviceInterface,
 } from './InputConstants';
 import {
   InputBindingsInterface,
   AbstractInputBindings,
 } from '../Gameplay/InputBindings';
+import { Observable } from '@babylonjs/core';
 
 export class InputDeviceOrientation implements InputDeviceInterface {
   public hasOrientationSupport: boolean = false;

@@ -1,8 +1,4 @@
-import {
-  TransformNode,
-  Vector3,
-  Quaternion,
-} from 'babylonjs';
+
 import {
   Client,
   Room,
@@ -18,6 +14,7 @@ import {
 import {
   NetworkRoomConstants,
 } from '../Network/NetworkConstants';
+import { Quaternion, TransformNode, Vector3 } from '@babylonjs/core';
 
 export abstract class AbstractNetworkWorld extends AbstractWorld {
   public networkHost: string;
