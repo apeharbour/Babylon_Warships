@@ -1,11 +1,4 @@
-import {
-  AssetsManager,
-  Engine,
-  EngineOptions,
-  NullEngine,
-  NullEngineOptions,
-  Scene,
-} from '@babylonjs/core';
+import { Engine, EngineOptions, NullEngine, NullEngineOptions, Scene, AssetsManager } from '@babylonjs/core';
 import { XMLHttpRequest } from 'xhr2';
 
 import {
