@@ -57,8 +57,8 @@ export class Player {
 
     return new Promise((resolve, reject) => {
       SceneLoader.LoadAssetContainer(
-        "",
-        this._modelPath,
+        "/Resources/models/",
+        "yacht.glb",
         this._scene,
         (container: AssetContainer) => {
           container.addAllToScene();
@@ -66,6 +66,8 @@ export class Player {
             this._mesh = container.meshes[0] as Mesh;
             this._mesh.position = this._initialPosition; // Set the mesh position here
             this._position = this._mesh.position.clone(); // Update _position here
+            this._mesh.scaling = new Vector3(3, 3, 3)
+            resolve()
             // Rest of the code...
           //  this._mesh.addRotation(0, Math.PI/2, 0);
           } else {
@@ -170,6 +172,10 @@ export class Player {
   
 
   public setTargetPosition(position: Vector3): void {
+    if (!this._mesh) {
+      console.warn("No mesh", this)
+      return
+      }
        const gridOrigin = new Vector3(0, 0, 0);
        const tileHeight = 8;
        const tileRadius = 8;

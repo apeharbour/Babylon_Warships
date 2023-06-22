@@ -70,7 +70,7 @@ import { Player } from '../Player';
               /* more model paths... */
             ];
             
-            const initialPositions = [new Vector3(0, 0, 0), new Vector3(10, 0, 0), new Vector3(20, 0, 0), new Vector3(30, 0, 0) /* more initial positions... */];
+            const initialPositions = [new Vector3(0, 0, 20), new Vector3(10, 0, 20), new Vector3(20, 0, 20), new Vector3(30, 0, 20) /* more initial positions... */];
             
             // Register the GLTF loader plugin
 //            BABYLON.SceneLoader.RegisterPlugin(new GLTFFileLoader());
@@ -107,11 +107,16 @@ import { Player } from '../Player';
                   if (pickResult && pickResult.hit) {
                     const clickedMesh = pickResult.pickedMesh;
                     if (clickedMesh instanceof BABYLON.InstancedMesh) {
+                      if (!this.player) {
+                        console.warn("No Player");
+                        resolve(this);
+                      } else {
                       this.player.setTargetPosition(clickedMesh.position);
                       this.player._isMoving = true;
                       this.player._isTurning = true;
                     }
                   }
+                }
                   break;
                 
                 
@@ -213,7 +218,7 @@ camera.keysRight.push(68); // "D"
     //block_mat.diffuseColor = Color3.Blue();
      // const waterMesh = new BABYLON.Mesh("waterMesh", this.scene);
     const water = new WaterMaterial("water", this.scene);
-    water.bumpTexture = new BABYLON.Texture("Resources/textures/waterbump.png", this.scene); // Set the bump texture
+    water.bumpTexture = new BABYLON.Texture("/Resources/textures/waterbump.png", this.scene); // Set the bump texture
        //Water properties
        water.backFaceCulling = true;
     water.windForce = 10;

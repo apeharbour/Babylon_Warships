@@ -62,6 +62,9 @@ export class GameManager {
         true
       );
 
+        this.canvasElement.width = window.innerWidth;
+        this.canvasElement.height = window.innerHeight;
+        
       // Initialize assetManager here
     this.assetManager = new AssetsManager(this.scene);  // Add this line to initialize assetManager
 
@@ -91,9 +94,7 @@ export class GameManager {
 
     // Main render loop
     this.engine.runRenderLoop(() => {
-      if (!this.scene) {
-        return;
-      }
+      this.scene.render();
 
       if (this.inputManager) {
         this.inputManager.update();
@@ -112,7 +113,7 @@ export class GameManager {
         }
 
       this.world.update();
-      this.scene.render();
+
 
       if (this.inputManager) {
         this.inputManager.afterRender();
