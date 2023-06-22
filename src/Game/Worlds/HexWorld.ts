@@ -221,22 +221,25 @@ camera.keysRight.push(68); // "D"
     water.bumpTexture = new BABYLON.Texture("/Resources/textures/waterbump.png", this.scene); // Set the bump texture
        //Water properties
        water.backFaceCulling = true;
-    water.windForce = 10;
-    water.waveHeight = 0.1;
+       water.windForce = 5;
+    water.waveHeight = 0.01;
     water.windDirection = new BABYLON.Vector2(1, 1);
     water.waterColor = new BABYLON.Color3(0.1, 0, 1);
-    water.colorBlendFactor = 0.3;
-    water.bumpHeight = 0.03;
-    water.waveLength = 0.3;
-    
+
+    water.bumpHeight = 2;
+    water.waveLength = 10;
+    water.colorBlendFactor = 0.1;
     //Add skybox and ground to the reflection and refraction
     water.addToRenderList(skybox);
-    //water.addToRenderList(cylinder);
-
-    cylinder.material = water;
-    cylinder.setEnabled(false);
-    
-    radius += 0.5; //add a small gap
+ 
+    // const cylinder = BABYLON.MeshBuilder.CreateCylinder("cylinder", {tessellation: 6, height:0.3, diameter: 2 * radius});
+    //  const block_mat = new BABYLON.StandardMaterial("block_mat",scene);
+    //  block_mat.diffuseColor = BABYLON.Color3.Blue();
+    // cylinder.material = water;
+    // cylinder.setEnabled(false);
+    let sourceCylinder = BABYLON.MeshBuilder.CreateCylinder('ins_cy', { tessellation: 6, height: 0.001, diameter: 2 * radius });
+    sourceCylinder.setEnabled(false)
+    radius += 0.25; //add a small gap
     const bigHexRadius = 12;
     const height = Math.sqrt(3) * 0.5 * radius;
     let nbInCol = 2 * bigHexRadius + 1;
@@ -246,25 +249,24 @@ camera.keysRight.push(68); // "D"
     let colStartAt = 0;
     let hexCount = 0;
     //center row
-    for(let i = 0; i < nbInCol; i++) {
-        const instance = cylinder.createInstance("ins_cy" + (hexCount++))
+    let cylinders = []
+    for (let i = 0; i < nbInCol; i++) {
+        const instance = sourceCylinder.clone()
         instance.position = new BABYLON.Vector3(colStartAt, 0, currentRow);
-
-      // Create a HexTile for each hexagon and store it in the hexTiles array
-      const hexTile = new HexTile(cylinder, instance.position, radius);
-      this.hexTiles.push(hexTile);
-
         currentRow += 2 * height;
+        cylinders.push(instance)
     }
     colStartAt += deltaCol;
     rowStartAt += height;
     currentRow = rowStartAt;
     nbInCol--;
     while (nbInCol > bigHexRadius) {
-        for(let i = 0; i < nbInCol; i++) {
-            const instanceR = cylinder.createInstance("ins_cy" + (hexCount++))
+        for (let i = 0; i < nbInCol; i++) {
+            const instanceR = sourceCylinder.clone()
+            cylinders.push(instanceR)
             instanceR.position = new BABYLON.Vector3(colStartAt, 0, currentRow);
-            const instanceL = cylinder.createInstance("ins_cy" + (hexCount++))
+            const instanceL = sourceCylinder.clone()
+            cylinders.push(instanceL)
             instanceL.position = new BABYLON.Vector3(-colStartAt, 0, currentRow);
             currentRow += 2 * height;
         }
@@ -273,6 +275,9 @@ camera.keysRight.push(68); // "D"
         currentRow = rowStartAt;
         nbInCol--;
     }
+
+    let ground = BABYLON.Mesh.MergeMeshes(cylinders, true, true, null, false, false)
+    ground.material = water
     }
 
     
