@@ -70,7 +70,7 @@ import { Player } from '../Player';
               /* more model paths... */
             ];
             
-            const initialPositions = [new Vector3(0, 0, 20), new Vector3(10, 0, 20), new Vector3(20, 0, 20), new Vector3(30, 0, 20) /* more initial positions... */];
+            const initialPositions = [new Vector3(0, 0, 0), new Vector3(11.5, 0, 6.5), new Vector3(23, 0, -13), new Vector3(46.5, 0, 0) /* more initial positions... */];
             
             // Register the GLTF loader plugin
 //            BABYLON.SceneLoader.RegisterPlugin(new GLTFFileLoader());

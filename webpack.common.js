@@ -32,9 +32,8 @@ module.exports = {
         test: /\.(jpg|png|gif|env|dds|hdr|glb|gltf)$/i,
         use: [
           {
-            loader: 'url-loader',
+            loader: 'file-loader',
             options: {
-              limit: false,
               name: 'static/resources/[name].[hash:8].[ext]',
             },
           },

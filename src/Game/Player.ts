@@ -55,19 +55,20 @@ export class Player {
   public async load(): Promise<void> {
     console.log(`Loading model from: ${this._modelPath}`); // Debug print statement
 
+    console.log(`Model path: ${this._modelPath}`); // This will print the model path
     return new Promise((resolve, reject) => {
-      SceneLoader.LoadAssetContainer(
+      SceneLoader.ImportMesh(
+        "",
         "/Resources/models/",
-        "yacht.glb",
+        "2186.glb",
         this._scene,
-        (container: AssetContainer) => {
-          container.addAllToScene();
-          if (container.meshes.length > 0) {
-            this._mesh = container.meshes[0] as Mesh;
-            this._mesh.position = this._initialPosition; // Set the mesh position here
-            this._position = this._mesh.position.clone(); // Update _position here
-            this._mesh.scaling = new Vector3(3, 3, 3)
-            resolve()
+        (meshes, particleSystems, skeletons, animationGroups, transformNodes, geometries, lights) => {
+          if (meshes && meshes.length > 0) {
+            this._mesh = meshes[0] as Mesh;
+        this._mesh.position = this._initialPosition; // Set the mesh position here
+        this._position = this._mesh.position.clone(); // Update _position here
+        this._mesh.scaling = new Vector3(2, 2, 2);
+        resolve();
             // Rest of the code...
           //  this._mesh.addRotation(0, Math.PI/2, 0);
           } else {
